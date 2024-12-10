@@ -1,5 +1,7 @@
 package org.example.CountriesCount;
 
+import java.util.Stack;
+
 public class Solution {
     public int solution(int[][] A){
         // leci po kazdym elemencie w tabeli. Po przejsciu przez komorke, zapisuje w pomocniczej ze odwiedzona
@@ -7,44 +9,41 @@ public class Solution {
         // Jak nie ma sasiada z takim samym "kolorem: -> +1 countriesCount
         // jak wystepuje sąsiad nieodwiedzony to ->+1 countriesCount i zaznaczam "odwiedzenie" na sasiadach
         // jak jest sąsiad odwiedzony to skip
-        boolean[][] visited= new boolean[A.length][];
-        int countriesCount=0;
-        int color;
-        boolean sasiad;
-        for (int i = 0; i < A.length; i++) {
-            for (int j = 0; j < A[i].length; j++) {
-                if(!visited[i][j]){
-                    color=A[i][j];
-                    visited[i][j]=true;
-                    if(j+1>A[i].length){
-                        if (A[i][j + 1] == color && !visited[i][j + 1]) {//prawy sasiad
-                            visited[i][j + 1] = true;
+        int rows = A.length;
+        int cols = A[0].length;
+        boolean[][] visited = new boolean[rows][cols];
+        int countries = 0;
+
+        // Directions for moving north, south, east, and west
+        int[] dRow = {-1, 1, 0, 0};
+        int[] dCol = {0, 0, -1, 1};
+
+
+        // Main loop to find connected components
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (!visited[i][j]) {
+                    countries++;
+                    Stack<int[]> stack = new Stack<>();
+                    stack.push(new int[]{i, j});
+
+                    while (!stack.isEmpty()) {
+                        int[] current = stack.pop();
+                        int r = current[0], c = current[1];
+
+                        if (r < 0 || r >= rows || c < 0 || c >= cols || visited[r][c] || A[r][c] != A[i][j]) {
                             continue;
                         }
-                    }
-                    if(j!=0){
-                        if (A[i][j - 1] == color && !visited[i][j - 1]) {//lewy sasiad
-                            visited[i][j - 1] = true;
-                            continue;
+
+                        visited[r][c] = true;
+                        for (int k = 0; k < 4; k++) {
+                            stack.push(new int[]{r + dRow[k], c + dCol[k]});
                         }
                     }
-                    if(i!=0){
-                        if (A[i - 1][j] == color && !visited[i - 1][j]) {//gorny sasiad
-                            visited[i - 1][j] = true;
-                            continue;
-                        }
-                    }
-                    if(j+1>A.length){
-                        if (A[i + 1][j] == color && !visited[i + 1][j]) {//dolny sasiad
-                            visited[i + 1][j] = true;
-                            continue;
-                        }
-                    }
-                    countriesCount++;
                 }
             }
-
         }
-        return 1;
+
+        return countries;
     }
 }
