@@ -17,7 +17,7 @@ public class Solution {
             result.append("bb");
             bControl-=2;
         }
-        while (result.length()<=(A+B)-2){
+        while (result.length()<(A+B)){
             String control=result.substring(result.length()-2);
             if(Objects.equals(control, "aa") && bControl>0) {
                 result.append("b");
@@ -27,17 +27,10 @@ public class Solution {
                 result.append("a");
                 aControl-=1;
             }
-            if(Objects.equals(control, "ab") && aControl>0) {
+            if(aControl>=bControl){
                 result.append("a");
                 aControl-=1;
-            }else {
-                result.append("b");
-                bControl-=1;
-            }
-            if(Objects.equals(control, "ba") && aControl>0) {
-                result.append("a");
-                aControl-=1;
-            }else {
+            }else{
                 result.append("b");
                 bControl-=1;
             }
