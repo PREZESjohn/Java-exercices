@@ -4,37 +4,21 @@ import java.util.Objects;
 
 public class Solution {
     public String solution(int A, int B) {
-        StringBuilder result= new StringBuilder("");
-        boolean aGreater=(A>=B);
-        int aControl=A;
-        int bControl=B;
-        if(A==1 && B==1) return "ab";
-        if(aGreater) {
-            result.append("aa");
-            aControl-=2;
-        }
-        if(!aGreater) {
-            result.append("bb");
-            bControl-=2;
-        }
-        while (result.length()<(A+B)){
-            String control=result.substring(result.length()-2);
-            if(Objects.equals(control, "aa") && bControl>0) {
-                result.append("b");
-                bControl-=1;
+        StringBuilder result = new StringBuilder();
+        char lastChar1 = ' ', lastChar2 = ' ';
+
+        while (A > 0 || B > 0) {
+            if (A > 0 && (lastChar1 != 'a' || lastChar2 != 'a') && (A >= B || lastChar1 == 'b' && lastChar2 == 'b')) {
+                result.append('a');
+                A--;
+                lastChar2 = lastChar1;
+                lastChar1 = 'a';
+            } else if (B > 0 && (lastChar1 != 'b' || lastChar2 != 'b')) {
+                result.append('b');
+                B--;
+                lastChar2 = lastChar1;
+                lastChar1 = 'b';
             }
-            if(Objects.equals(control, "bb") && aControl>0) {
-                result.append("a");
-                aControl-=1;
-            }
-            if(aControl>=bControl){
-                result.append("a");
-                aControl-=1;
-            }else{
-                result.append("b");
-                bControl-=1;
-            }
-            System.out.println(result.toString());
         }
         return result.toString();
     }
