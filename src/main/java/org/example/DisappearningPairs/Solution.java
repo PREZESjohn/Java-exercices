@@ -7,12 +7,11 @@ public class Solution {
     
     private String findPair(String s){
         String result;
-        for (int i = 0; i < s.length()-1; i++) {
-            if(s.substring(i, i + 2).equals("AA")||s.substring(i, i + 2).equals("BB")||s.substring(i, i + 2).equals("CC")){
-                result=s.replace(s.substring(i,i+2),"");
-                return findPair(result);
-            }
+        result=s.replaceFirst("AA|BB|CC","");
+        if(result.equals(s)){
+            return s;
+        }else{
+            return findPair(result);
         }
-        return s;
     }
 }
