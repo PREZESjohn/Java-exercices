@@ -9,8 +9,8 @@ public class Solution {
         String result;
         for (int i = 0; i < s.length()-1; i++) {
             if(s.substring(i, i + 2).equals("AA")||s.substring(i, i + 2).equals("BB")||s.substring(i, i + 2).equals("CC")){
-                result=s.substring(i,i+1);
-                findPair(result);
+                result=s.replace(s.substring(i,i+2),"");
+                return findPair(result);
             }
         }
         return s;
