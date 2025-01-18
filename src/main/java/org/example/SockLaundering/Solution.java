@@ -28,18 +28,42 @@ public class Solution {
             }
         }
         Integer match=0;
-        while(K>0 && !CL.isEmpty() && !DL.isEmpty()){
-            for (int j = 0; j < CL.size(); j++) {
-                match= CL.get(j);
-                for (int l = 0; l < DL.size(); l++) {
-                    if(match.equals(DL.get(l))){
-                        K--;
-                        pairs++;
-                        CL.remove(j);
-                        DL.remove(l);
-                        break;
-                    }
+        Stack<Integer> stosCzystych = new Stack<>();
+        stosCzystych.addAll(CL);
+        while(K>0 && !stosCzystych.isEmpty() && !DL.isEmpty()){
+            boolean happen=false;
+            for (int j = 0; j < DL.size(); j++) {
+                if(DL.get(j).equals(stosCzystych.peek())){
+                    DL.remove(j);
+                    stosCzystych.pop();
+                    K--;
+                    pairs++;
+                    happen=true;
+                    break;
                 }
+            }
+            if(!happen) stosCzystych.pop();
+        }
+        if(K!=0 && K%2==0 && DL.size()>1){
+            pairs+=howManyPairs(DL);
+
+        }
+        return pairs;
+    }
+    public int howManyPairs(List<Integer> list){
+        int pairs = 0;
+        Collections.sort(list);
+        int i = 0;
+        while(i < list.size() - 1){
+            if(list.get(i).equals(list.get(i+1))){
+                list.remove(i);
+                list.remove(i);
+
+                i = Math.max(0, (i - 1));
+                pairs++;
+            }
+            else{
+                i++;
             }
         }
         return pairs;
