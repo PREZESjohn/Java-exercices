@@ -1,72 +1,42 @@
 package org.example.SockLaundering;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Solution {
     public int solution(int K, int[] C, int[] D) {
-        List<Integer> CL=Arrays.stream(C)
-                .boxed()
-                .collect(Collectors.toList());
-        List<Integer> DL=Arrays.stream(D)
-                .boxed()
-                .collect(Collectors.toList());
-
-        int pairs = 0;
-        Collections.sort(CL);
-        int i = 0;
-        while(i < CL.size() - 1){
-            if(CL.get(i).equals(CL.get(i+1))){
-                CL.remove(i);
-                CL.remove(i);
-
-                i = Math.max(0, (i - 1));
-                pairs++;
-            }
-            else{
-                i++;
+        Map<Integer, Integer> cleanCount = new HashMap<>();
+        Map<Integer, Integer> dirtyCount = new HashMap<>();
+        for (int c : C) {
+            cleanCount.put(c, cleanCount.getOrDefault(c, 0) + 1);
+        }
+        for (int d : D) {
+            dirtyCount.put(d, dirtyCount.getOrDefault(d, 0) + 1);
+        }
+        int totalPairs = 0;
+        for (Map.Entry<Integer, Integer> entry : cleanCount.entrySet()) {
+            int color = entry.getKey();
+            int count = entry.getValue();
+            totalPairs += count / 2;
+            cleanCount.put(color, count % 2);
+        }
+        for (Map.Entry<Integer, Integer> entry : cleanCount.entrySet()) {
+            if (K == 0) break;
+            int color = entry.getKey();
+            if (entry.getValue() == 1 && dirtyCount.getOrDefault(color, 0) > 0) {
+                totalPairs++;
+                dirtyCount.put(color, dirtyCount.get(color) - 1);
+                K--;
             }
         }
-        Integer match=0;
-        Stack<Integer> stosCzystych = new Stack<>();
-        stosCzystych.addAll(CL);
-        while(K>0 && !stosCzystych.isEmpty() && !DL.isEmpty()){
-            boolean happen=false;
-            for (int j = 0; j < DL.size(); j++) {
-                if(DL.get(j).equals(stosCzystych.peek())){
-                    DL.remove(j);
-                    stosCzystych.pop();
-                    K--;
-                    pairs++;
-                    happen=true;
-                    break;
-                }
-            }
-            if(!happen) stosCzystych.pop();
+        for (Map.Entry<Integer, Integer> entry : dirtyCount.entrySet()) {
+            if (K < 2) break;
+            int color = entry.getKey();
+            int count = entry.getValue();
+            int pairs = Math.min(count / 2, K / 2);
+            totalPairs += pairs;
+            K -= pairs * 2;
         }
-        if(K!=0 && K%2==0 && DL.size()>1){
-            pairs+=howManyPairs(DL);
-
-        }
-        return pairs;
+        return totalPairs;
     }
-    public int howManyPairs(List<Integer> list){
-        int pairs = 0;
-        Collections.sort(list);
-        int i = 0;
-        while(i < list.size() - 1){
-            if(list.get(i).equals(list.get(i+1))){
-                list.remove(i);
-                list.remove(i);
-
-                i = Math.max(0, (i - 1));
-                pairs++;
-            }
-            else{
-                i++;
-            }
-        }
-        return pairs;
-    }
-
 }
