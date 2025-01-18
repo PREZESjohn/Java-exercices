@@ -27,7 +27,21 @@ public class Solution {
                 i++;
             }
         }
-
+        Integer match=0;
+        while(K>0 && !CL.isEmpty() && !DL.isEmpty()){
+            for (int j = 0; j < CL.size(); j++) {
+                match= CL.get(j);
+                for (int l = 0; l < DL.size(); l++) {
+                    if(match.equals(DL.get(l))){
+                        K--;
+                        pairs++;
+                        CL.remove(j);
+                        DL.remove(l);
+                        break;
+                    }
+                }
+            }
+        }
         return pairs;
     }
 
