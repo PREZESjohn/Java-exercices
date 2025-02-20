@@ -15,17 +15,9 @@ It will never give you an empty array (that's not a walk, that's standing still!
  */
 public class Solution {
     public boolean solution(char[] walk){
-        if(walk.length!=10){return false;}
-        int x =0;
-        int y =0;
-        for (int i = 0; i < walk.length; i++) {
-            switch (walk[i]){
-                case 'n'-> y++;
-                case 's'-> y--;
-                case 'e'-> x++;
-                case 'w'-> x--;
-            }
-        }
-        return (x==0 && y==0);
+        String walkness= new String(walk);
+        return walkness.chars().filter(ch -> ch == 'n').count() == walkness.chars().filter(ch -> ch == 's').count() &&
+                walkness.chars().filter(ch -> ch == 'w').count() == walkness.chars().filter(ch -> ch == 'e').count()&&
+                walkness.chars().count()==10;
     }
  }
